@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+      <title>FuelWatch Prices For all metro regions</title>
+      <ttl>720</ttl>
+      <link>http://www.fuelwatch.wa.gov.au</link>
+      <description>13/12/2017 - all metro regions</description>
+      <language>en-us</language>
+      <copyright>Copyright 2005 FuelWatch. All Rights Reserved.</copyright>
+      <lastBuildDate>Wed Dec 13 16:20:42 WST 2017Wed Dec 13 16:20:42 WST 2017</lastBuildDate>
+      <image>
+      <url>/fuelwatch/art/fuelwatch-logo.gif</url>
+
+      <title>FuelWatch</title>
+      <link>http://www.fuelwatch.wa.gov.au</link></image>
+
+      <item>
+        <title>128.9: Caltex Woolworths Beckenham</title>
+        <description>Address: 63 William St, BECKENHAM, Phone: (08) 9258 8413</description>
+        <brand>Caltex Woolworths</brand>
+        <date>2017-12-13</date>
+        <price>128.9</price>
+        <trading-name>Caltex Woolworths Beckenham</trading-name>
+        <location>BECKENHAM</location>
+        <address>63 William St</address>
+        <phone>(08) 9258 8413</phone>
+        <latitude>-32.022054</latitude>
+        <longitude>115.954779</longitude>
+        <site-features>, </site-features>
+      </item>
+      <item>
+        <title>129.9: Caltex StarMart Bassendean</title>
+        <description>Address: 309 Guildford Rd (Cnr North Rd), BASSENDEAN, Phone: (08) 9377 1027</description>
+        <brand>Caltex</brand>
+        <date>2017-12-13</date>
+        <price>129.9</price>
+        <trading-name>Caltex StarMart Bassendean</trading-name>
+        <location>BASSENDEAN</location>
+        <address>309 Guildford Rd (Cnr North Rd)</address>
+        <phone>(08) 9377 1027</phone>
+        <latitude>-31.901307</latitude>
+        <longitude>115.959101</longitude>
+        <site-features>, </site-features>
+      </item>
+      <item>
+        <title>137.9: Shell Gidgegannup</title>
+        <description>Address: 2095 Toodyay Rd, GIDGEGANNUP, Phone: (08) 9578 3411</description>
+        <brand>Shell</brand>
+        <date>2017-12-13</date>
+        <price>137.9</price>
+        <trading-name>Shell Gidgegannup</trading-name>
+        <location>GIDGEGANNUP</location>
+        <address>2095 Toodyay Rd</address>
+        <phone>(08) 9578 3411</phone>
+        <latitude>-31.793258</latitude>
+        <longitude>116.194092</longitude>
+        <site-features>, </site-features>
+      </item>
+  </channel>
+</rss>
