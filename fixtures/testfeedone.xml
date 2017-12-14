@@ -9,11 +9,10 @@
       <copyright>Copyright 2005 FuelWatch. All Rights Reserved.</copyright>
       <lastBuildDate>Wed Dec 13 16:20:42 WST 2017Wed Dec 13 16:20:42 WST 2017</lastBuildDate>
       <image>
-      <url>/fuelwatch/art/fuelwatch-logo.gif</url>
-
-      <title>FuelWatch</title>
-      <link>http://www.fuelwatch.wa.gov.au</link></image>
-
+        <url>/fuelwatch/art/fuelwatch-logo.gif</url>
+        <title>FuelWatch</title>
+        <link>http://www.fuelwatch.wa.gov.au</link>
+      </image>
       <item>
         <title>128.9: Caltex Woolworths Beckenham</title>
         <description>Address: 63 William St, BECKENHAM, Phone: (08) 9258 8413</description>
@@ -40,20 +39,6 @@
         <phone>(08) 9377 1027</phone>
         <latitude>-31.901307</latitude>
         <longitude>115.959101</longitude>
-        <site-features>, </site-features>
-      </item>
-      <item>
-        <title>137.9: Shell Gidgegannup</title>
-        <description>Address: 2095 Toodyay Rd, GIDGEGANNUP, Phone: (08) 9578 3411</description>
-        <brand>Shell</brand>
-        <date>2017-12-13</date>
-        <price>137.9</price>
-        <trading-name>Shell Gidgegannup</trading-name>
-        <location>GIDGEGANNUP</location>
-        <address>2095 Toodyay Rd</address>
-        <phone>(08) 9578 3411</phone>
-        <latitude>-31.793258</latitude>
-        <longitude>116.194092</longitude>
         <site-features>, </site-features>
       </item>
   </channel>

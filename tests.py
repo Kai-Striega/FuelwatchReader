@@ -26,33 +26,49 @@ class TestUrlFormatter(unittest.TestCase):
 
 class TestFeedParser(unittest.TestCase):
 
-    def test_correct_station_returned_from_parser(self):
-        actual_stations = fuelscanner.parse_feed('fixtures/testfeedone.xml')
-
-        expected_station_1 = Station(
+    def setUp(self):
+        self.expected_station_1 = Station(
             name='Caltex Woolworths Beckenham',
             address='63 William St',
             brand='Caltex Woolworths',
             price=128.9
         )
-        expected_station_2 = Station(
+        self.expected_station_2 = Station(
             name='Caltex StarMart Bassendean',
             address='309 Guildford Rd (Cnr North Rd)',
             brand='Caltex',
             price=129.9
         )
-        un_expected_station = Station(
+        self.expected_station_3 = Station(
+            name='Shell Gidgegannup',
+            address='2095 Toodyay Rd',
+            brand='Shell',
+            price=137.9
+        )
+        self.un_expected_station = Station(
             name='Vibe Mt Helena',
             address='9 McVicar Pl',
             brand='Vibe',
             price=126.9
         )
 
-        self.assertTrue(len(actual_stations) == 2)
-        self.assertIn(expected_station_1, actual_stations)
-        self.assertIn(expected_station_2, actual_stations)
-        self.assertNotIn(un_expected_station, actual_stations)
+    def test_correct_station_returned_from_parser(self):
+        actual_stations = fuelscanner.parse_feed('fixtures/testfeedone.xml')
 
+        self.assertTrue(len(actual_stations) == 2)
+        self.assertIn(self.expected_station_1, actual_stations)
+        self.assertIn(self.expected_station_2, actual_stations)
+        self.assertNotIn(self.un_expected_station, actual_stations)
+
+    def test_parses_correctly_given_multiple_feeds(self):
+        test_urls = ('fixtures/testfeedone.xml', 'fixtures/testfeedtwo.xml')
+        actual_stations = fuelscanner.parse_feed(test_urls)
+
+        self.assertTrue(len(actual_stations) == 3)
+        self.assertIn(self.expected_station_1, actual_stations)
+        self.assertIn(self.expected_station_2, actual_stations)
+        self.assertIn(self.expected_station_3, actual_stations)
+        self.assertNotIn(self.un_expected_station, actual_stations)
 
 if __name__ == '__main__':
     unittest.main()
