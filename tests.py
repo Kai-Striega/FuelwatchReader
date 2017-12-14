@@ -1,6 +1,7 @@
 import unittest
 from collections import namedtuple
 import fuelscanner
+from fuelscanner import Station
 
 
 class TestUrlFormatter(unittest.TestCase):
@@ -25,25 +26,20 @@ class TestUrlFormatter(unittest.TestCase):
 
 class TestFeedParser(unittest.TestCase):
 
-    def test_correct_station_are_returned_from_feed_parser(self):
-        Station = namedtuple('Station', 'name address brand price')
+    def test_correct_station_returned_from_parser(self):
+        actual_stations = fuelscanner.parse_feed('fixtures/testfeedone.xml')
+
         expected_station_1 = Station(
             name='Caltex Woolworths Beckenham',
-            address='63 William St, BECKENHAM',
+            address='63 William St',
             brand='Caltex Woolworths',
             price=128.9
         )
         expected_station_2 = Station(
             name='Caltex StarMart Bassendean',
-            address='309 Guildford Rd (Cnr North Rd), BASSENDEAN',
+            address='309 Guildford Rd (Cnr North Rd)',
             brand='Caltex',
             price=129.9
-        )
-        expected_station_3 = Station(
-            name='Shell Gidgegannup',
-            address='2095 Toodyay Rd, GIDGEGANNUP',
-            brand='Shell',
-            price=137.9
         )
         un_expected_station = Station(
             name='Vibe Mt Helena',
@@ -52,11 +48,9 @@ class TestFeedParser(unittest.TestCase):
             price=126.9
         )
 
-        actual_stations = fuelscanner.parse_feed('fixtures/testfeedone.xml')
-
+        self.assertTrue(len(actual_stations) == 2)
         self.assertIn(expected_station_1, actual_stations)
         self.assertIn(expected_station_2, actual_stations)
-        self.assertIn(expected_station_3, actual_stations)
         self.assertNotIn(un_expected_station, actual_stations)
 
 
