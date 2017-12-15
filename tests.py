@@ -61,29 +61,23 @@ class TestFeedParser(unittest.TestCase):
         actual_stations = fuelscanner.parse_feed('fixtures/testfeedone.xml')
         self.assertTrue(len(actual_stations) == 2)
 
-        expected_stations = (
+        expected_stations = [
             fuelscanner.Station('Caltex Beckenham', '63 William St', 128.9),
             fuelscanner.Station('Caltex Bassendean', '309 Guild Rd', 129.9)
-        )
-
-        for station in expected_stations:
-            self.assertIn(station, actual_stations)
-
+        ]
+        self.assertEqual(expected_stations, actual_stations)
         station = fuelscanner.Station('Vibe Mt Helena', '9 McVicar Pl', 126.9)
         self.assertNotIn(station, actual_stations)
 
     def test_parses_correctly_given_multiple_feeds(self):
         test_urls = ('fixtures/testfeedone.xml', 'fixtures/testfeedtwo.xml')
-        actual_stations = fuelscanner.parse_feed(test_urls)
-        self.assertTrue(len(actual_stations) == 3)
-
-        expected_stations = (
+        expected_stations = [
             fuelscanner.Station('Caltex Beckenham', '63 William St', 128.9),
             fuelscanner.Station('Caltex Bassendean', '309 Guild Rd', 129.9),
             fuelscanner.Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9)
-        )
-        for station in expected_stations:
-            self.assertIn(station, actual_stations)
+        ]
+        actual_stations = fuelscanner.parse_feed(test_urls)
+        self.assertEqual(expected_stations, actual_stations)
 
         station = fuelscanner.Station('Vibe Mt Helena', '9 McVicar Pl', 126.9)
         self.assertNotIn(station, actual_stations)
@@ -99,14 +93,13 @@ class TestFeedParser(unittest.TestCase):
         actual_stations = fuelscanner.parse_feed(test_urls, test_vouchers)
         self.assertEqual(expected_stations, actual_stations)
 
-    def test_raises_bozo_warning_for_poorly_formated_feed(self):
+    def test_ignores_poorly_formated_rss_feeds(self):
         test_urls = ['fixtures/testfeedtwo.xml', 'poorly_formatted_feed.xml']
         expected_station = [
             fuelscanner.Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9)
         ]
         actual_stations = fuelscanner.parse_feed(test_urls)
         self.assertEqual(expected_station, actual_stations)
-
 
 if __name__ == '__main__':
     unittest.main()
