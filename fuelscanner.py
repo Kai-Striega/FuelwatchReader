@@ -8,7 +8,7 @@ class Station(object):
     """Fuel Station summary object."""
 
     def __init__(self, name, address, price, discount=0):
-        """Instantiate Station object.
+        """Initiate Station object.
 
         Args:
             name (str): Business name of the fuel station.
@@ -22,10 +22,20 @@ class Station(object):
         self.discount = discount
 
     def __eq__(self, other):
-        """Override default Equals behaviour."""
+        """Equal iff all instance attributes equal."""
         if isinstance(other, self.__class__):
             return self.__dict__ == other.__dict__
         return False
+
+    def __str__(self):
+        """Return summary of Station attributes."""
+        head = f'{self.name} with a fuel price of {self.discounted_price} c/L'
+        tail = f'at {self.address}'
+
+        if self.discount:
+            mid = f'(incl. discount of {self.discount} c/L)'
+            return ' '.join([head, mid, tail])
+        return ' '.join([head, tail])
 
     @property
     def discounted_price(self):
@@ -45,6 +55,7 @@ def format_url(feed_url, suburbs):
 def parse_feed(url_set):
     """Parse the RSS feeds and return list of station summaries."""
     if isinstance(url_set, str):
+        # Avoid iterating over string in the following loop.
         url_set = [url_set]
 
     station_summary_list = list()

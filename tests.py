@@ -22,6 +22,18 @@ class TestStationClass(unittest.TestCase):
         self.assertNotEqual(station_a, station_c)
         self.assertNotEqual(station_b, station_c)
 
+    def test_station_string_magic_method(self):
+        station_a = fuelscanner.Station('Station A', 'Address 1', 100)
+        expected_string = 'Station A with a fuel price of 100 c/L at Address 1'
+        actual_string = str(station_a)
+        self.assertEqual(expected_string, actual_string)
+
+        station_a.discount = 4
+        expected_string_discount = 'Station A with a fuel price of 96 c/L\
+ (incl. discount of 4 c/L) at Address 1'
+        actual_string_discount = str(station_a)
+        self.assertEqual(expected_string_discount, actual_string_discount)
+
 
 class TestUrlFormatter(unittest.TestCase):
 
@@ -51,7 +63,7 @@ class TestFeedParser(unittest.TestCase):
 
         expected_stations = (
             fuelscanner.Station('Caltex Beckenham', '63 William St', 128.9),
-            fuelscanner.Station('Caltex Bassendean', '309 Guildford Rd', 129.9)
+            fuelscanner.Station('Caltex Bassendean', '309 Guild Rd', 129.9)
         )
 
         for station in expected_stations:
