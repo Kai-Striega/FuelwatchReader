@@ -52,8 +52,10 @@ def format_url(feed_url, suburbs):
     return urls
 
 
-def parse_feed(url_set):
+def parse_feed(url_set, fuel_vouchers=None):
     """Parse the RSS feeds and return list of station summaries."""
+    if not isinstance(fuel_vouchers, dict):
+        fuel_vouchers = {'': 0}
     if isinstance(url_set, str):
         # Avoid iterating over string in the following loop.
         url_set = [url_set]
@@ -64,8 +66,9 @@ def parse_feed(url_set):
         for entry in rss_feed.entries:
             station = Station(
                 name=entry.get('trading-name'),
-                address=entry.get('address'),
-                price=float(entry.get('price'))
+                address=entry.address,
+                price=float(entry.price),
+                discount=fuel_vouchers.get(entry.brand, 0)
             )
             station_summary_list.append(station)
     return station_summary_list

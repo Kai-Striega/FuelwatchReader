@@ -88,6 +88,25 @@ class TestFeedParser(unittest.TestCase):
         station = fuelscanner.Station('Vibe Mt Helena', '9 McVicar Pl', 126.9)
         self.assertNotIn(station, actual_stations)
 
+    def test_applies_discount_while_parsing(self):
+        test_vouchers = {'Caltex': 5, 'some_other_voucher': 7}
+        test_urls = ['fixtures/testfeedone.xml', 'fixtures/testfeedtwo.xml']
+        expected_stations = [
+            fuelscanner.Station('Caltex Beckenham', '63 William St', 128.9, 5),
+            fuelscanner.Station('Caltex Bassendean', '309 Guild Rd', 129.9, 5),
+            fuelscanner.Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9)
+        ]
+        actual_stations = fuelscanner.parse_feed(test_urls, test_vouchers)
+        self.assertEqual(expected_stations, actual_stations)
+
+    def test_raises_bozo_warning_for_poorly_formated_feed(self):
+        test_urls = ['fixtures/testfeedtwo.xml', 'poorly_formatted_feed.xml']
+        expected_station = [
+            fuelscanner.Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9)
+        ]
+        actual_stations = fuelscanner.parse_feed(test_urls)
+        self.assertEqual(expected_station, actual_stations)
+
 
 if __name__ == '__main__':
     unittest.main()
