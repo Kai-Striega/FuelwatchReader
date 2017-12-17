@@ -2,15 +2,37 @@ import unittest
 import fuelscanner
 
 
+class TestFindCheapestStations(unittest.TestCase):
+
+    def test_finds_cheapest_with_single_min(self):
+        stations = [
+            fuelscanner.Station('Caltex Beckenham', '63 William St', 128.9),
+            fuelscanner.Station('Caltex Bassendean', '309 Guild Rd', 129.9)
+        ]
+        expected_cheapest_station = stations[0]
+        actual_cheapest_station = fuelscanner.find_cheapest_station(stations)
+        self.assertEqual([expected_cheapest_station], actual_cheapest_station)
+
+    def test_finds_cheapest_with_multiple_min(self):
+        stations = [
+            fuelscanner.Station('Caltex Beckenham', '63 William St', 128.9),
+            fuelscanner.Station('Caltex Bassendean', '309 Guild Rd', 128.9),
+            fuelscanner.Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9)
+        ]
+        expected_cheapest_stations = stations[:2]
+        actual_cheapest_stations = fuelscanner.find_cheapest_station(stations)
+        self.assertEqual(expected_cheapest_stations, actual_cheapest_stations)
+
+
 class TestStationClass(unittest.TestCase):
 
-    def test_discounted_price_property(self):
+    def test_fuel_price_property(self):
         station_1 = fuelscanner.Station('Station 1', 'Address 1', 128.9, 4)
-        self.assertEqual(station_1.discounted_price, 124.9)
+        self.assertEqual(station_1.fuel_price, 124.9)
         station_2 = fuelscanner.Station('Station 2', 'Address 2', 125.0)
-        self.assertEqual(station_2.discounted_price, 125.0)
+        self.assertEqual(station_2.fuel_price, 125.0)
         station_2.discount = 4
-        self.assertEqual(station_2.discounted_price, 121.0)
+        self.assertEqual(station_2.fuel_price, 121.0)
 
     def test_station_equality(self):
         """Station attributes must all be equal for Station equality."""
@@ -100,6 +122,7 @@ class TestFeedParser(unittest.TestCase):
         ]
         actual_stations = fuelscanner.parse_feed(test_urls)
         self.assertEqual(expected_station, actual_stations)
+
 
 if __name__ == '__main__':
     unittest.main()

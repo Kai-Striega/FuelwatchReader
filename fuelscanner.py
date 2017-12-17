@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from itertools import product
+from operator import attrgetter
 import feedparser
 
 
@@ -29,7 +30,7 @@ class Station(object):
 
     def __str__(self):
         """Return summary of Station attributes."""
-        head = f'{self.name} with a fuel price of {self.discounted_price} c/L'
+        head = f'{self.name} with a fuel price of {self.fuel_price} c/L'
         tail = f'at {self.address}'
 
         if self.discount:
@@ -38,7 +39,7 @@ class Station(object):
         return ' '.join([head, tail])
 
     @property
-    def discounted_price(self):
+    def fuel_price(self):
         """Fuel price with discount included."""
         return self.price - self.discount
 
@@ -72,3 +73,11 @@ def parse_feed(url_set, fuel_vouchers=None):
             )
             station_summary_list.append(station)
     return station_summary_list
+
+
+def find_cheapest_station(stations):
+    """Find the stations with the cheapest fuel price."""
+    ordered_stations = sorted(stations, key=attrgetter('fuel_price'))
+    min_price = ordered_stations[0].fuel_price
+
+    return [station for station in stations if station.fuel_price == min_price]
