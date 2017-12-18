@@ -30,7 +30,7 @@ class Station(object):
 
     def __str__(self):
         """Return summary of Station attributes."""
-        head = f'{self.name} with a fuel price of {self.fuel_price} c/L'
+        head = f'{self.name} with a fuel price of {self.discount_price} c/L'
         tail = f'at {self.address}'
 
         if self.discount:
@@ -39,7 +39,7 @@ class Station(object):
         return ' '.join([head, tail])
 
     @property
-    def fuel_price(self):
+    def discount_price(self):
         """Fuel price with discount included."""
         return self.price - self.discount
 
@@ -77,7 +77,24 @@ def parse_feed(url_set, fuel_vouchers=None):
 
 def find_cheapest_station(stations):
     """Find the stations with the cheapest fuel price."""
-    ordered_stations = sorted(stations, key=attrgetter('fuel_price'))
-    min_price = ordered_stations[0].fuel_price
+    cheapest_station = min(stations, key=attrgetter('discount_price'))
+    min_price = cheapest_station.discount_price
+    return [s for s in stations if s.discount_price == min_price]
 
-    return [station for station in stations if station.fuel_price == min_price]
+
+def main():
+    """Script entry point."""
+    # To-Do: Load data from CLI or ini file.
+    suburbs = ['Scarborough', 'Cottesloe']
+    fuelwatch_url = 'http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?'
+    urls = format_url(fuelwatch_url, suburbs)
+    stations = parse_feed(urls)
+    cheapest_stations = find_cheapest_station(stations)
+
+    print('The cheapest fuel stations:')
+    for station in cheapest_stations:
+        print(station)
+
+
+if __name__ == "__main__":
+    main()
