@@ -73,7 +73,7 @@ class TestFeedParser(unittest.TestCase):
         self.assertNotIn(station, actual_stations)
 
     def test_applies_discount_while_parsing(self):
-        test_vouchers = {'Caltex': 5, 'some_other_voucher': 7}
+        test_vouchers = {'caltex': 5, 'some_other_voucher': 7}
         test_urls = ['fixtures/testfeedone.xml', 'fixtures/testfeedtwo.xml']
         expected_stations = [
             Station('Caltex Beckenham', '63 William St', 128.9, 5),
