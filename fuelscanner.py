@@ -4,8 +4,9 @@ import configparser
 from itertools import product
 from collections import namedtuple
 import feedparser
+from twilio.rest import Client
 
-
+FUELWATCH_URL = 'http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?'
 Station = namedtuple('Station', 'name address price discount')
 
 
@@ -56,21 +57,43 @@ def format_message(stations):
     return '\n'.join(message)
 
 
+def send_sms_message(body, sid, auth_token, user_number, twilio_number):
+    """Send a text message to the user with the lowest fuel price."""
+    client = Client(sid, auth_token)
+    message = client.messages.create(
+        to=user_number,
+        from_=twilio_number,
+        body=body)
+    return message
+
+
 def main():
     """Script entry point."""
     config = configparser.ConfigParser()
     config.read('configfile.ini')
 
-    suburbs = config['FUELWATCH']['suburbs'].split(',')
-    fuelwatch_url = config['FUELWATCH']['fuelwatchURL']
+    suburbs = config['USER DETAILS']['suburbs'].split(',')
     fuel_vouchers = dict(config['FUEL VOUCHERS'])
 
-    urls = format_url(fuelwatch_url, suburbs)
+    urls = format_url(FUELWATCH_URL, suburbs)
     stations = parse_feed(urls, fuel_vouchers)
     cheapest_stations = find_cheapest_station(stations)
 
     message = format_message(cheapest_stations)
-    print(message)
+
+    twilio_sid = config['TWILIO']['sid']
+    twilio_auth_token = config['TWILIO']['auth_token']
+    twilio_number = config['TWILIO']['twilio_number']
+
+    user_number = config['USER DETAILS']['mobile_number']
+
+    send_sms_message(
+        message,
+        twilio_sid,
+        twilio_auth_token,
+        user_number,
+        twilio_number
+    )
 
 
 if __name__ == "__main__":
