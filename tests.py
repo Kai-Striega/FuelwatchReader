@@ -1,4 +1,5 @@
 import unittest
+import configparser
 import fuelscanner
 from fuelscanner import Station
 
@@ -90,6 +91,58 @@ class TestFeedParser(unittest.TestCase):
         ]
         actual_stations = fuelscanner.parse_feed(test_urls)
         self.assertEqual(expected_station, actual_stations)
+
+
+class TestMessageFormattingAndSending(unittest.TestCase):
+
+    def test_message_formats_single_station(self):
+        fuel_station = Station('Caltex Beckenham', '63 William St', 128.9, 5)
+
+        expected_message = '\n'.join([
+            'The cheapest fuel stations:',
+            '128.9 (5) at Caltex Beckenham, 63 William St'
+        ])
+
+        message = fuelscanner.format_message([fuel_station])
+        self.assertEqual(message, expected_message)
+
+    def test_formats_multiple_stations(self):
+
+        fuel_stations = [
+            Station('Caltex Beckenham', '63 William St', 128.9, 5),
+            Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9, 0)
+        ]
+
+        expected_message = '\n'.join([
+            'The cheapest fuel stations:',
+            '128.9 (5) at Caltex Beckenham, 63 William St',
+            '137.9 (0) at Shell Gidgegannup, 2095 Toodyay Rd'
+        ])
+
+        message = fuelscanner.format_message(fuel_stations)
+        self.assertEqual(message, expected_message)
+
+    def test_sends_sms_message(self):
+        config = configparser.ConfigParser()
+        config.read('configfile.ini')
+
+        message = 'This is a simple test message'
+        if config['TWILIO'].getboolean('trial_account'):
+            message = 'Sent from your Twilio trial account - ' + message
+
+        # Magic number reserved for testing if an SMS is sent.
+        # https://www.twilio.com/docs/guides/testing-sms#magic-phone-numbers
+        twilio_number = '+15005550006'
+        user_number = '+61400000000'
+
+        returned_message = fuelscanner.send_sms_message(
+            message,
+            config['TWILIO']['test_sid'],
+            config['TWILIO']['test_auth_token'],
+            user_number,
+            twilio_number
+        )
+        self.assertEqual(message, returned_message.body)
 
 
 if __name__ == '__main__':
