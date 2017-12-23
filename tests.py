@@ -35,21 +35,43 @@ class TestFindCheapestStations(unittest.TestCase):
 class TestUrlFormatter(unittest.TestCase):
 
     def test_urls_with_single_suburb(self):
-        url = 'sample_url'
-        suburb = 'SuburbA'
-        excpected_url = ('sample_url&Suburb=SuburbA',)
-        actual_url = fuelscanner.format_url(url, suburb)
+        url = 'sample_url&'
+        url_arguments = {'Suburb': ['SuburbA']}
+        excpected_url = ['sample_url&Suburb=SuburbA']
+        actual_url = fuelscanner.format_url(url, **url_arguments)
         self.assertEqual(actual_url, excpected_url)
 
     def test_urls_with_two_suburbs(self):
-        url = 'sample_url'
-        suburbs = ('SuburbA', 'SuburbB')
-        excpected_urls = (
+        url = 'sample_url&'
+        url_arguments = {'Suburb': ['SuburbA', 'SuburbB']}
+        excpected_urls = [
             'sample_url&Suburb=SuburbA',
             'sample_url&Suburb=SuburbB'
-        )
-        actual_urls = fuelscanner.format_url(url, suburbs)
+        ]
+        actual_urls = fuelscanner.format_url(url, **url_arguments)
         self.assertEqual(actual_urls, excpected_urls)
+
+    def test_returns_only_url_if_no_other_args_given(self):
+        url = 'sample_url&'
+        excpected_url = ['sample_url&']
+        actual_url = fuelscanner.format_url(url)
+        self.assertEqual(actual_url, excpected_url)
+
+    def test_url_with_multiple_args(self):
+        url = 'sample_url&'
+        url_args = {
+            'Suburb': ['SuburbA', 'SuburbB'],
+            'Product': ['1', '2']
+        }
+        excpected_urls = [
+            'sample_url&Suburb=SuburbA&Product=1',
+            'sample_url&Suburb=SuburbB&Product=1',
+            'sample_url&Suburb=SuburbA&Product=2',
+            'sample_url&Suburb=SuburbB&Product=2'
+        ]
+        actual_urls = fuelscanner.format_url(url, **url_args)
+
+        self.assertEqual(set(actual_urls), set(excpected_urls))
 
 
 class TestFeedParser(unittest.TestCase):
@@ -113,7 +135,6 @@ class TestMessageFormattingAndSending(unittest.TestCase):
         self.assertEqual(message, expected_message)
 
     def test_formats_multiple_stations(self):
-
         fuel_stations = [
             Station('Caltex Beckenham', '63 William St', 128.9, 5),
             Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9, 0)

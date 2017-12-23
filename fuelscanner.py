@@ -2,7 +2,7 @@
 
 import configparser
 from itertools import product
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 import feedparser
 from twilio.rest import Client
 
@@ -10,12 +10,24 @@ FUELWATCH_URL = 'http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?'
 Station = namedtuple('Station', 'name address price discount')
 
 
-def format_url(feed_url, suburbs):
-    """Format URLs for the FuelWatch RSS feed."""
-    if isinstance(suburbs, str):
-        return '&Suburb='.join([feed_url, suburbs]),
+def parse_fuelwatch_params(config):
+    """Return dict of lists of Fuelwatch parameters."""
+    fuelwatch_param_fields = ('Suburb', 'Product', 'Day', 'Surrounding')
+    fuelwatch_params = defaultdict(list)
 
-    urls = tuple('&Suburb='.join(url) for url in product([feed_url], suburbs))
+    for field in fuelwatch_param_fields:
+        parameter = config['FUELWATCH PARAMS'][field]
+        if parameter:
+            fuelwatch_params[field] = parameter.split(',')
+
+    return fuelwatch_params
+
+
+def format_url(feed_url, **kwargs):
+    """Format URLs for the FuelWatch RSS feed."""
+    pairs = (product([key.title()], value) for (key, value) in kwargs.items())
+    joined_pairs = (map('='.join, pair) for pair in pairs)
+    urls = [feed_url + '&'.join(args) for args in product(*joined_pairs)]
     return urls
 
 
@@ -72,20 +84,19 @@ def main():
     config = configparser.ConfigParser()
     config.read('configfile.ini')
 
-    suburbs = config['USER DETAILS']['suburbs'].split(',')
-    fuel_vouchers = dict(config['FUEL VOUCHERS'])
+    fuelwatch_params = parse_fuelwatch_params(config)
+    urls = format_url(FUELWATCH_URL, **fuelwatch_params)
 
-    urls = format_url(FUELWATCH_URL, suburbs)
+    fuel_vouchers = dict(config['FUEL VOUCHERS'])
     stations = parse_feed(urls, fuel_vouchers)
     cheapest_stations = find_cheapest_station(stations)
-
     message = format_message(cheapest_stations)
 
     twilio_sid = config['TWILIO']['sid']
     twilio_auth_token = config['TWILIO']['auth_token']
     twilio_number = config['TWILIO']['twilio_number']
 
-    user_number = config['USER DETAILS']['mobile_number']
+    user_number = config['FUELWATCH PARAMS']['mobile_number']
 
     send_sms_message(
         message,
