@@ -1,7 +1,13 @@
 import unittest
 import configparser
+import os
+
 import fuelscanner
 from fuelscanner import Station
+
+DIR_NAME = os.path.dirname(os.path.realpath(__file__))
+TEST_URL_ONE = os.path.join(os.sep, DIR_NAME, 'fixtures', 'testfeedone.xml')
+TEST_URL_TWO = os.path.join(os.sep, DIR_NAME, 'fixtures', 'testfeedtwo.xml')
 
 
 class TestFindCheapestStations(unittest.TestCase):
@@ -49,7 +55,7 @@ class TestUrlFormatter(unittest.TestCase):
 class TestFeedParser(unittest.TestCase):
 
     def test_correct_station_returned_from_parser(self):
-        actual_stations = fuelscanner.parse_feed('fixtures/testfeedone.xml')
+        actual_stations = fuelscanner.parse_feed(TEST_URL_ONE)
         self.assertTrue(len(actual_stations) == 2)
 
         expected_stations = [
@@ -61,7 +67,7 @@ class TestFeedParser(unittest.TestCase):
         self.assertNotIn(station, actual_stations)
 
     def test_parses_correctly_given_multiple_feeds(self):
-        test_urls = ('fixtures/testfeedone.xml', 'fixtures/testfeedtwo.xml')
+        test_urls = (TEST_URL_ONE, TEST_URL_TWO)
         expected_stations = [
             Station('Caltex Beckenham', '63 William St', 128.9, 0),
             Station('Caltex Bassendean', '309 Guild Rd', 129.9, 0),
@@ -75,7 +81,7 @@ class TestFeedParser(unittest.TestCase):
 
     def test_applies_discount_while_parsing(self):
         test_vouchers = {'caltex': 5, 'some_other_voucher': 7}
-        test_urls = ['fixtures/testfeedone.xml', 'fixtures/testfeedtwo.xml']
+        test_urls = [TEST_URL_ONE,  TEST_URL_TWO]
         expected_stations = [
             Station('Caltex Beckenham', '63 William St', 128.9, 5),
             Station('Caltex Bassendean', '309 Guild Rd', 129.9, 5),
@@ -85,7 +91,7 @@ class TestFeedParser(unittest.TestCase):
         self.assertEqual(expected_stations, actual_stations)
 
     def test_ignores_poorly_formated_rss_feeds(self):
-        test_urls = ['fixtures/testfeedtwo.xml', 'poorly_formatted_feed.xml']
+        test_urls = [TEST_URL_TWO, 'poorly_formatted_feed.xml']
         expected_station = [
             Station('Shell Gidgegannup', '2095 Toodyay Rd', 137.9, 0)
         ]
