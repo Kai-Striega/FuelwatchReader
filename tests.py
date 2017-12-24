@@ -8,7 +8,7 @@ from fuelscanner import Station
 DIR_NAME = os.path.dirname(os.path.realpath(__file__))
 TEST_URL_ONE = os.path.join(os.sep, DIR_NAME, 'fixtures', 'testfeedone.xml')
 TEST_URL_TWO = os.path.join(os.sep, DIR_NAME, 'fixtures', 'testfeedtwo.xml')
-
+TEST_CONFIG = os.path.join(os.sep, DIR_NAME, 'fixtures', 'test_configfile.ini')
 
 class TestFindCheapestStations(unittest.TestCase):
 
@@ -151,23 +151,18 @@ class TestMessageFormattingAndSending(unittest.TestCase):
 
     def test_sends_sms_message(self):
         config = configparser.ConfigParser()
-        config.read('configfile.ini')
+        config.read(TEST_CONFIG)
 
         message = 'This is a simple test message'
         if config['TWILIO'].getboolean('trial_account'):
             message = 'Sent from your Twilio trial account - ' + message
 
-        # Magic number reserved for testing if an SMS is sent.
-        # https://www.twilio.com/docs/guides/testing-sms#magic-phone-numbers
-        twilio_number = '+15005550006'
-        user_number = '+61400000000'
-
         returned_message = fuelscanner.send_sms_message(
             message,
             config['TWILIO']['test_sid'],
             config['TWILIO']['test_auth_token'],
-            user_number,
-            twilio_number
+            config['TWILIO']['mobile_number'],
+            config['TWILIO']['twilio_number']
         )
         self.assertEqual(message, returned_message.body)
 

@@ -39,7 +39,7 @@ The required fields to run the script are:
 - auth_token Twilio authentication.
 - twilio_number: Number from which the text will be sent.
 
-Running the tests also requires:
+If you intend to run the tests also update `fixtures/test_configfile`, with your test account credentials.
 - test_sid: Twilio test account secure identifier.
 - test_auth_token: Twilio test account secure identifier.
 - trial_account: Whether the Twilio account is a trial account.
