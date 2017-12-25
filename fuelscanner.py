@@ -96,7 +96,7 @@ def main():
     twilio_auth_token = config['TWILIO']['auth_token']
     twilio_number = config['TWILIO']['twilio_number']
 
-    user_number = config['FUELWATCH PARAMS']['mobile_number']
+    user_number = config['TWILIO']['mobile_number']
 
     send_sms_message(
         message,
