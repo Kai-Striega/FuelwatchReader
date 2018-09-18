@@ -25,11 +25,10 @@ Github offers [full instructions](https://help.github.com/articles/cloning-a-rep
 - To access the Sid and Auth Token go to: `"Console Dashboard" -> "Settings" -> "General" -> "API Credentials"`
 - To access your account number you will need to purchase a number (this is included in your trial).
   - To purchase a number go to: `"Console Dashboard" -> "Phone Numbers" -> "Buy a Number"`.
-  - When asked to select the capabilities select `sms`, then click the search button.
   - Select any number with `sms` capability and select the `Buy` button.
   - To view your Twilio number go to: `"Console Dashboard" -> "Phone Numbers" -> "Verified Caller IDs"`
 
-Note: Twilio strongly encourages using [E.164](https://en.wikipedia.org/wiki/E.164) formatting. The prefix for Australia is `+64`. If your mobile number is `04 1234 5678`, it should be written as `+61412345678`. For a more detailed explanation see the Twilio [article](https://support.twilio.com/hc/en-us/articles/223183008-Formatting-International-Phone-Numbers)
+Note: Twilio strongly encourages using [E.164](https://en.wikipedia.org/wiki/E.164) formatting. The prefix for Australia is `+61`. If your mobile number is `04 1234 5678`, it should be written as `+61412345678`. For a more detailed explanation see the Twilio [article](https://support.twilio.com/hc/en-us/articles/223183008-Formatting-International-Phone-Numbers)
 
 #### Update the config file
 Open the config file `vi configfile.ini`
