@@ -157,14 +157,16 @@ class TestMessageFormattingAndSending(unittest.TestCase):
         if config['TWILIO'].getboolean('trial_account'):
             message = 'Sent from your Twilio trial account - ' + message
 
-        returned_message = fuelscanner.send_sms_message(
-            message,
-            config['TWILIO']['test_sid'],
-            config['TWILIO']['test_auth_token'],
-            config['TWILIO']['mobile_number'],
-            config['TWILIO']['twilio_number']
-        )
-        self.assertEqual(message, returned_message.body)
+        if config['TWILIO']['test_sid'] and config['TWILIO']['test_auth_token']:
+            # Only require test if sid and auth otken are provided
+            returned_message = fuelscanner.send_sms_message(
+                message,
+                config['TWILIO']['test_sid'],
+                config['TWILIO']['test_auth_token'],
+                config['TWILIO']['mobile_number'],
+                config['TWILIO']['twilio_number']
+            )
+            self.assertEqual(message, returned_message.body)
 
 
 if __name__ == '__main__':
