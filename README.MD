@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Kai-Striega/FuelwatchReader.svg?branch=master)](https://travis-ci.org/Kai-Striega/FuelwatchReader)
 # Fuelwatch Price Reader
 This script parses the Fuelwatch RSS feed, finds the lowest fuel price then sends an SMS to a designated mobile number containing the lowest fuel prices for a given list of suburbs.
 
